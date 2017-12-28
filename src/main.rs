@@ -8,39 +8,57 @@ fn main() {
     println!("Guess the number!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
-    let mut tries = 0; 
+    let mut tries = 0;
+    let mut in_vec = Vec::<(u32, String)>::new();
 
-    loop{
-
+    loop {
         tries += 1;
 
         println!("Please input your guess.");
 
-        let mut guess = String::new();
-
-        io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
-
-        let guess: u32 = match guess.trim().parse() {
+        let guess = match input() {
             Ok(num) => num,
-            Err(_) => {
-                println!("This isn't a number, try again!");
+            Err(error) => {
+                println!("{}", error);
                 continue;
             }
         };
 
-        println!("You guessed: {}", guess);
+        in_vec.push((tries, guess.to_string()));
+
+        println!("You guessed!: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
+            Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => {
+            Ordering::Equal => {
                 println!("You win!");
                 println!("It took {} tries to finish!", tries);
+                println!("These were your guesses: ");
+                let mut j = 0;
+                while j < 2 {
+                    for i in &in_vec {
+                        println!("Try index was: {} \n Guess was: {}", i.0, i.1);
+                    }
+                    j += 1;
+                }
                 break;
             }
         }
 
         println!("Current nr. of tries: {} \n", tries);
+    }
+}
+
+fn input() -> Result<u32, String> {
+    let mut guess = String::new();
+
+    io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+
+    match guess.trim().parse() {
+        Ok(num) => Ok(num),
+        Err(error) => Err(format!("{}{}", "in parsing to u32, ", error)),
     }
 }
