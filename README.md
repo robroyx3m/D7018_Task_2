@@ -1,4 +1,4 @@
-# Guessing_Game 2a
+# Guessing_Game 2c
 
 A user has to guess what the secret random number is!
 The random number is between 1 and 100.
