@@ -32,12 +32,18 @@ fn main() {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
-                println!("You win!");
+                println!("\n You win!");
                 println!("It took {} tries to finish!", tries);
-                println!("These were your last three guesses: ");
+                println!("These were your last guesses: ");
 
                 let n = 3;
-                let slice_in_vec = &in_vec[in_vec.len() - n..];
+                let length = in_vec.len();
+                let slice_in_vec;
+                if length > 2 {
+                    slice_in_vec = &in_vec[length - n..];
+                } else {
+                    slice_in_vec = &in_vec[0..];
+                }
 
                 for i in slice_in_vec.iter().rev() {
                     println!("Guess {} = {}", i.0, i.1);
